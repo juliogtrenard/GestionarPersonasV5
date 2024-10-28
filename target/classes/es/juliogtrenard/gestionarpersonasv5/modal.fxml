@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" maxHeight="200.0" maxWidth="500.0" minHeight="200.0" minWidth="500.0" prefHeight="200.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.juliogtrenard.gestionarpersonasv5.controladores.ControladorModal">
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <Label text="Nombre">
+         <HBox.margin>
+            <Insets right="20.0" />
+         </HBox.margin>
+      </Label>
+      <TextField fx:id="txtNombre" prefWidth="350.0" />
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <Label text="Apellidos">
+         <HBox.margin>
+            <Insets right="20.0" />
+         </HBox.margin>
+      </Label>
+      <TextField fx:id="txtApellidos" prefWidth="350.0" />
+   </HBox>
+   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
+      <Label text="Edad">
+         <HBox.margin>
+            <Insets right="20.0" />
+         </HBox.margin>
+      </Label>
+      <TextField fx:id="txtEdad" prefWidth="100.0" />
+      <padding>
+         <Insets left="63.0" />
+      </padding>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <Button mnemonicParsing="false" onAction="#guardarPersona" text="Guardar">
+         <HBox.margin>
+            <Insets right="50.0" />
+         </HBox.margin>
+      </Button>
+      <Button mnemonicParsing="false" onAction="#cerrarVentana" text="Cancelar" />
+   </HBox>
+</VBox>
