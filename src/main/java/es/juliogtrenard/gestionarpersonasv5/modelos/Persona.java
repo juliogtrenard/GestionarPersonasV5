@@ -4,6 +4,8 @@ package es.juliogtrenard.gestionarpersonasv5.modelos;
  * Clase que representa a una persona con nombre, apellidos y edad.
  */
 public class Persona {
+    private boolean visible;
+
     /**
      * Nombre de la persona.
      */
@@ -84,5 +86,13 @@ public class Persona {
      */
     public void setEdad(int edad) {
         this.edad = edad;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

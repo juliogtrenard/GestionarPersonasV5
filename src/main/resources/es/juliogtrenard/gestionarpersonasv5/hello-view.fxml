@@ -6,16 +6,14 @@
 <?import javafx.scene.layout.*?>
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.juliogtrenard.gestionarpersonasv5.controladores.HelloController">
-   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-      <children>
-         <Label text="Filtrar por nombre:">
-            <HBox.margin>
-               <Insets right="10.0" />
-            </HBox.margin>
-         </Label>
-         <TextField prefHeight="24.0" prefWidth="135.0" />
-      </children>
-   </HBox>
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+        <Label text="Filtrar por nombre:">
+           <HBox.margin>
+               <Insets right="10.0"/>
+           </HBox.margin>
+        </Label>
+        <TextField fx:id="txtFiltrarNombre" prefHeight="24.0" prefWidth="135.0"/>
+    </HBox>
     <TableView fx:id="tvTabla" maxHeight="600.0" maxWidth="800.0" prefHeight="300.0" prefWidth="400.0" VBox.vgrow="NEVER">
         <columns>
             <TableColumn editable="false" prefWidth="126.0" text="NOMBRE">

@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -33,12 +34,31 @@ public class HelloController {
     @FXML
     private TableView<Persona> tvTabla;
 
+    @FXML
+    private TextField txtFiltrarNombre;
+
     /**
      * Inicializa la lista de personas.
      */
     @FXML
     public void initialize() {
         listaPersonas = new ArrayList<>();
+
+        txtFiltrarNombre.setOnKeyReleased(event -> {
+            System.out.println("Evento onKeyReleased llamado");
+            String nombre = txtFiltrarNombre.getText().toLowerCase();
+            System.out.println("Texto del campo de texto: " + nombre);
+            tvTabla.getItems().forEach(persona -> {
+                System.out.println("Persona: " + persona.getNombre());
+                if (persona.getNombre().toLowerCase().contains(nombre)) {
+                    System.out.println("Condición de filtro cumplida");
+                    persona.setVisible(true);
+                } else {
+                    persona.setVisible(false);
+                }
+            });
+            tvTabla.refresh();
+        });
     }
 
     /**
