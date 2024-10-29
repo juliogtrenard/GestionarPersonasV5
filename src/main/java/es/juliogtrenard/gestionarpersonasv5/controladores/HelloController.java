@@ -123,7 +123,7 @@ public class HelloController {
     public void modificarPersona(ActionEvent event) throws IOException {
         Persona personaSeleccionada = tvTabla.getSelectionModel().getSelectedItem();
         if (personaSeleccionada == null) {
-            error();
+            error("Seleccione una persona.");
             return;
         }
 
@@ -161,21 +161,23 @@ public class HelloController {
     public void eliminarPersona() {
         Persona personaSeleccionada = tvTabla.getSelectionModel().getSelectedItem();
         if (personaSeleccionada == null) {
-            error();
+            error("Seleccione una persona.");
             return;
         }
 
         listaPersonas.remove(personaSeleccionada);
         tvTabla.getItems().remove(personaSeleccionada);
 
-        confirmacion();
+        confirmacion("Persona eliminada correctamente.");
     }
 
     /**
      * Muestra una alerta de error cuando no se selecciona una persona.
+     *
+     * @param mensaje El mensaje de la alerta.
      */
-    private void error() {
-        Alert alerta = new Alert(Alert.AlertType.ERROR, "Seleccione una persona.");
+    private void error(String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.ERROR, mensaje);
         alerta.setHeaderText(null);
         alerta.setTitle("ERROR:");
         Stage stage = (Stage) alerta.getDialogPane().getScene().getWindow();
@@ -185,11 +187,13 @@ public class HelloController {
 
     /**
      * Muestra una alerta de confirmación cuando se elimina una persona.
+     *
+     * @param mensaje El mensaje de la alerta.
      */
-    private void confirmacion() {
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION, "Persona eliminada correctamente.");
+    private void confirmacion(String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION, mensaje);
         alerta.setHeaderText(null);
-        alerta.setTitle("ERROR:");
+        alerta.setTitle("INFO:");
         Stage stage = (Stage) alerta.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/img/library_icon.png"))));
         alerta.showAndWait();
@@ -206,9 +210,22 @@ public class HelloController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar archivo CSV");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-        File f = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
+
+        // Establecer el directorio inicial en el directorio del proyecto
+        File dirInicial = new File(System.getProperty("user.dir"));
+        fileChooser.setInitialDirectory(dirInicial);
+
+        // Obtiene el Stage a partir del evento
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        File f = fileChooser.showSaveDialog(stage);
 
         if (f != null) {
+            // Si el archivo no tiene la extensión .csv, se renombra
+            if (!f.getName().toLowerCase().endsWith(".csv")) {
+                f = new File(f.getAbsolutePath() + ".csv");
+            }
+
+            // Escribir los datos
             try (BufferedWriter w = new BufferedWriter(new FileWriter(f))) {
                 // Escribir encabezados
                 w.write("Nombre,Apellidos,Edad");
@@ -221,8 +238,12 @@ public class HelloController {
                 }
             } catch (IOException e) {
                 System.out.println("Error: " + e.getMessage());
+
+                error("Error al exportar el archivo CSV.");
             }
         }
+
+        confirmacion("Archivo CSV exportado correctamente.");
     }
 
     public void importar(ActionEvent actionEvent) {
