@@ -152,11 +152,9 @@ public class HelloController {
     /**
      * Maneja el evento de eliminar una persona de la lista.
      * Elimina la persona seleccionada de la lista y de la tabla.
-     *
-     * @param event El evento que activa este metodo.
      */
     @FXML
-    public void eliminarPersona(ActionEvent event) {
+    public void eliminarPersona() {
         Persona personaSeleccionada = tvTabla.getSelectionModel().getSelectedItem();
         if (personaSeleccionada == null) {
             error();
@@ -191,5 +189,13 @@ public class HelloController {
         Stage stage = (Stage) alerta.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/img/library_icon.png"))));
         alerta.showAndWait();
+    }
+
+    public void exportar(ActionEvent actionEvent) {
+
+    }
+
+    public void importar(ActionEvent actionEvent) {
+
     }
 }
