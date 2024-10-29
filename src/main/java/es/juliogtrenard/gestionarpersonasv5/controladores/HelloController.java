@@ -12,9 +12,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.Predicate;
@@ -191,8 +195,34 @@ public class HelloController {
         alerta.showAndWait();
     }
 
-    public void exportar(ActionEvent actionEvent) {
+    /**
+     * Maneja el evento de exportar los datos de la tabla a un archivo CSV.
+     * Abre un cuadro de diálogo para guardar el archivo y escribe los datos
+     * de las personas, incluyendo sus nombres, apellidos y edades, en el archivo CSV.
+     *
+     * @param event El evento que activa este metodo.
+     */
+    public void exportar(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar archivo CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File f = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
 
+        if (f != null) {
+            try (BufferedWriter w = new BufferedWriter(new FileWriter(f))) {
+                // Escribir encabezados
+                w.write("Nombre,Apellidos,Edad");
+                w.newLine();
+
+                // Escribir datos de la tabla
+                for (Persona persona : tvTabla.getItems()) {
+                    w.write(persona.getNombre() + "," + persona.getApellidos() + "," + persona.getEdad());
+                    w.newLine();
+                }
+            } catch (IOException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
     }
 
     public void importar(ActionEvent actionEvent) {
