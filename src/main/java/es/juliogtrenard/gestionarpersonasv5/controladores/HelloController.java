@@ -1,6 +1,7 @@
 package es.juliogtrenard.gestionarpersonasv5.controladores;
 
 import es.juliogtrenard.gestionarpersonasv5.modelos.Persona;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +17,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Controlador para la interfaz gráfica de la gestión de personas.
@@ -34,30 +37,42 @@ public class HelloController {
     @FXML
     private TableView<Persona> tvTabla;
 
+    /**
+     * Campo de texto para escribir el nombre a filtrar
+     */
     @FXML
     private TextField txtFiltrarNombre;
 
     /**
-     * Inicializa la lista de personas.
+     * Inicializa la lista de personas. Además, llama a la función filtrarLista
      */
     @FXML
     public void initialize() {
         listaPersonas = new ArrayList<>();
 
-        txtFiltrarNombre.setOnKeyReleased(event -> {
-            System.out.println("Evento onKeyReleased llamado");
+        filtrarLista();
+    }
+
+    /**
+     * Filtra la lista de personas en la tabla por el nombre ingresado.
+     * La lista se actualiza en tiempo real cada vez que se presiona una tecla en el campo de texto.
+     */
+    private void filtrarLista() {
+        txtFiltrarNombre.setOnKeyReleased(_ -> {
+            // Permite hacer comparaciones sin tener en cuenta si el usuario escribe en mayúsculas o minúsculas.
             String nombre = txtFiltrarNombre.getText().toLowerCase();
-            System.out.println("Texto del campo de texto: " + nombre);
-            tvTabla.getItems().forEach(persona -> {
-                System.out.println("Persona: " + persona.getNombre());
-                if (persona.getNombre().toLowerCase().contains(nombre)) {
-                    System.out.println("Condición de filtro cumplida");
-                    persona.setVisible(true);
-                } else {
-                    persona.setVisible(false);
-                }
-            });
-            tvTabla.refresh();
+
+            // Se define un Predicate, que es una interfaz funcional que representa una condición que se puede evaluar.
+            // En este caso, el predicate verifica si el nombre de cada persona, convertido a minúsculas, contiene la cadena nombre que se ingresó en el cuadro de texto.
+            Predicate<Persona> predicate = persona -> persona.getNombre().toLowerCase().contains(nombre);
+
+            // Hace lo siguiente:
+            // listaPersonas.stream(): Se crea un flujo (stream) a partir de la lista original de personas.
+            // .filter(predicate): Se aplica el filtro definido anteriormente, lo que significa que solo las personas que cumplen la condición del predicate serán incluidas.
+            // .collect(Collectors.toList()): Se recolectan los elementos filtrados en una nueva lista.
+            // FXCollections.observableArrayList(...): Se convierte esta lista en una lista observable, lo que permite que la tabla se actualice automáticamente cuando los datos cambian.
+            // tvTabla.setItems(...): Se establece esta lista observable como el nuevo contenido de la tabla tvTabla.
+            tvTabla.setItems(FXCollections.observableArrayList(listaPersonas.stream().filter(predicate).collect(Collectors.toList())));
         });
     }
 
@@ -65,7 +80,7 @@ public class HelloController {
      * Maneja el evento de agregar una nueva persona a la lista.
      * Abre una ventana modal con el formulario para ingresar los datos de la nueva persona.
      *
-     * @param event El evento que activa este método.
+     * @param event El evento que activa este metodo.
      */
     @FXML
     public void agregarPersona(ActionEvent event) throws IOException {
