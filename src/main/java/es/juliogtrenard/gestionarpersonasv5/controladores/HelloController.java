@@ -16,10 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -236,17 +233,48 @@ public class HelloController {
                     w.write(persona.getNombre() + "," + persona.getApellidos() + "," + persona.getEdad());
                     w.newLine();
                 }
+
+                confirmacion("Archivo CSV exportado correctamente.");
             } catch (IOException e) {
                 System.out.println("Error: " + e.getMessage());
 
                 error("Error al exportar el archivo CSV.");
             }
         }
-
-        confirmacion("Archivo CSV exportado correctamente.");
     }
 
-    public void importar(ActionEvent actionEvent) {
+    public void importar(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Importar archivo CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
 
+        File dirInicial = new File(System.getProperty("user.dir"));
+        fileChooser.setInitialDirectory(dirInicial);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        File f = fileChooser.showOpenDialog(stage);
+
+        if (f != null) {
+            try (BufferedReader r = new BufferedReader(new FileReader(f))) {
+                String linea;
+                String primeraLinea = r.readLine();
+                while ((linea = r.readLine()) != null) {
+                    String[] campos = linea.split(",");
+                    if (campos.length >= 3) {
+                        String nombre = campos[0];
+                        String apellidos = campos[1];
+                        int edad = Integer.parseInt(campos[2]);
+
+                        Persona persona = new Persona(nombre, apellidos, edad);
+                        listaPersonas.add(persona);
+                        tvTabla.getItems().add(persona);
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Error al importar el archivo CSV: " + e.getMessage());
+                error("Error al importar el archivo CSV.");
+            }
+            confirmacion("Archivo CSV importado correctamente.");
+        }
     }
 }
