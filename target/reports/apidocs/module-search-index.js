@@ -1,1 +1,1 @@
-moduleSearchIndex = [{"l":"es.juliogtrenard.gestionarpersonasv4"}];updateSearchResults();
+moduleSearchIndex = [{"l":"es.juliogtrenard.gestionarpersonasv5"}];updateSearchResults();
